@@ -42,10 +42,4 @@ jobs:
           command: npm run db:update
           environment:
             DATABASE_URL: postgres://admin:postgres@localhost:5432/test
-            DATABASE_USE_SSL: 'false'    
-      - run:
-          command: npm test
-          environment:
-            NODE_ENV: test
-            TEST_DATABASE_URL: postgres://admin:postgres@localhost:5432/test
             DATABASE_USE_SSL: 'false'
