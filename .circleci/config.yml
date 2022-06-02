@@ -1,20 +1,25 @@
 version: 2.1
 orbs:
   heroku: circleci/heroku@1.0
-  node: circleci/node@5.0.0
+  node: circleci/node@2.0
 workflows:
   heroku-deploy:
     jobs:
-      - build-and-test
+      - build-and-test:
+          filters:
+            branches:
+              only: main
       - heroku/deploy-via-git:
+          app-name: $HEROKU_APP_NAME_STAGING
           requires:
             - build-and-test
           filters:
             branches:
-              only: master     
+              only: main
 jobs:
   build-and-test:
-    docker:
+    docker:        
+      - image: cimg/node:16.13.1
       - image: postgres:12
         environment:
           POSTGRES_USER: admin
@@ -22,13 +27,12 @@ jobs:
           POSTGRES_DB: test
     steps:
       - checkout
-      - node/install-packages:
-          cache-version: v1
+      - node/install-packages      
       - run:
           name: Install dockerize
-          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
           environment:
-            DOCKERIZE_VERSION: v0.6.1
+            DOCKERIZE_VERSION: v0.3.0
       - run:
           name: Wait for db
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -38,11 +42,10 @@ jobs:
           command: npm run db:update
           environment:
             DATABASE_URL: postgres://admin:postgres@localhost:5432/test
-            DATABASE_USE_SSL: 'false'
+            DATABASE_USE_SSL: 'false'    
       - run:
-          name: Execute test cases
           command: npm test
           environment:
             NODE_ENV: test
-            DATABASE_USE_SSL: 'false'
             TEST_DATABASE_URL: postgres://admin:postgres@localhost:5432/test
+            DATABASE_USE_SSL: 'false'
