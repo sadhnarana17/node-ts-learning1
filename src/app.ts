@@ -34,7 +34,6 @@ const runApp: () => Promise<RunAppResult> = catchAsync(
     // parse incoming request body and append data to `req.body`
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
-
     // setup jwt
     // app.use(
     //   jwt({
