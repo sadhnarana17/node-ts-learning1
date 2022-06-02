@@ -10,7 +10,7 @@ import v1 from './routes/v1';
 
 import catchAsync from './utils/catchAsync';
 import page404 from './routes/root';
-import getToken from './routes/middleware/jwtMiddleware';
+// import getToken from './routes/middleware/jwtMiddleware';
 
 const express = require('express');
 
