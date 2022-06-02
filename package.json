@@ -14,6 +14,7 @@
     "db:update": "npm run build && npm run typeorm migration:run",
     "db:update:dev": "npm run typeorm:dev migration:run",
     "db:update:test": "npm run typeorm:test migration:run",
+    "ci:db:update": "npm run typeorm migration:run",
     "db:generate:dev": "npm run typeorm:dev migration:generate -- -n",
     "test": "npx cross-env NODE_ENV=test mocha --exit --timeout 15000 -r ts-node/register --file ./test/setup.ts './test/**/*.test.ts'",
     "test:watch": "npx cross-env NODE_ENV=test mocha --timeout 15000 -r ts-node/register -w -R min --file ./test/setup.ts './test/**/*.test.ts'",
