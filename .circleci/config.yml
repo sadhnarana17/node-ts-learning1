@@ -1,0 +1,48 @@
+version: 2.1
+orbs:
+  heroku: circleci/heroku@1.0
+  node: circleci/node@5.0.0
+workflows:
+  heroku-deploy:
+    jobs:
+      - build-and-test
+      - heroku/deploy-via-git:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: master     
+jobs:
+  build-and-test:
+    docker:
+      - image: postgres:12
+        environment:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+    steps:
+      - checkout
+      - node/install-packages:
+          cache-version: v1
+      - run:
+          name: Install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.1
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          command: npm run lint
+      - run:
+          command: npm run db:update
+          environment:
+            DATABASE_URL: postgres://admin:postgres@localhost:5432/test
+            DATABASE_USE_SSL: 'false'
+      - run:
+          name: Execute test cases
+          command: npm test
+          environment:
+            NODE_ENV: test
+            DATABASE_USE_SSL: 'false'
+            TEST_DATABASE_URL: postgres://admin:postgres@localhost:5432/test

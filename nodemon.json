@@ -1,0 +1,17 @@
+{
+  "verbose": true,
+  "execMap": {
+    "js": "cross-env NODE_ENV=development node --inspect -r dotenv/config",
+    "ts": "cross-env NODE_ENV=development node --inspect -r ts-node/register -r dotenv/config"
+  },
+  "watch": [
+    "src/",
+    ".env",
+    "ormconfig.js",
+    "tsconfig.js"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,json,ts"
+}
