@@ -31,6 +31,7 @@ const runApp: () => Promise<RunAppResult> = catchAsync(
     app.get('/', (req, res) => {
       res.send('Express working');
     });
+
     // parse incoming request body and append data to `req.body`
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
