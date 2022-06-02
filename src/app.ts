@@ -29,7 +29,7 @@ const runApp: () => Promise<RunAppResult> = catchAsync(
     logger('info', 'All connections established, loading express app');
     const app = express();
     app.get('/', (req, res) => {
-      res.send('Express working');
+      res.send('Work in progress');
     });
 
     // parse incoming request body and append data to `req.body`
