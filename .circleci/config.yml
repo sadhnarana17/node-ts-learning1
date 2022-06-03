@@ -19,7 +19,7 @@ workflows:
 jobs:
   build-and-test:
     docker:        
-      - image: cimg/node:16.13.1
+      - image: cimg/node:16.15.0
       - image: postgres:12
         environment:
           POSTGRES_USER: admin
