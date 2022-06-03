@@ -3,14 +3,12 @@ import { createConnection, Connection } from 'typeorm';
 import * as helmet from 'helmet';
 import * as bodyParser from 'body-parser';
 import * as swaggerUi from 'swagger-ui-express';
-// import * as jwt from 'express-jwt';
 import logger from './service/logger';
 import errorMiddleware from './routes/middleware/errorMiddleware';
 import v1 from './routes/v1';
 
 import catchAsync from './utils/catchAsync';
 import page404 from './routes/root';
-// import getToken from './routes/middleware/jwtMiddleware';
 
 const express = require('express');
 
@@ -35,21 +33,6 @@ const runApp: () => Promise<RunAppResult> = catchAsync(
     // parse incoming request body and append data to `req.body`
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
-    // setup jwt
-    // app.use(
-    //   jwt({
-    //     secret: process.env.JWT_SECRET || '',
-    //     algorithms: ['HS512'],
-    //     getToken,
-    //   }).unless({
-    //     path: [
-    //       '/v1/auth/login',
-    //       '/v1/users/request-password-reset',
-    //       '/v1/users/reset-password',
-    //       '/v1/users',
-    //     ],
-    //   }),
-    // );
     app.use('/v1', v1);
 
     app.use(errorMiddleware);
