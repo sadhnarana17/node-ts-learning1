@@ -1,32 +1,34 @@
-import { Entity, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  Generated,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import Role from '../../types';
 import BaseEntity from './BaseEntity';
 
-export enum UserType {
-  admin = 'admin',
-  user = 'user',
-}
+@Entity()
+class User extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-@Entity({ name: 'users' })
-export default class User extends BaseEntity {
-  @Column({
-    unique: true,
-  })
+  @Column()
+  @Generated('uuid')
+  userId: string;
+
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
-
-  @Column({
-    default: Role.USER,
-  })
-  name: string;
-
-  @Column({
-    default: Role.USER,
-  })
-  role: string;
 
   @BeforeInsert()
   @BeforeUpdate()
@@ -34,10 +36,15 @@ export default class User extends BaseEntity {
     if (this.password) {
       this.password = await bcrypt.hash(this.password, 10);
     }
-    this.email = this.email.toLowerCase();
   }
 
-  checkIfPasswordMatch(unencryptedPassword: string) {
-    return bcrypt.compareSync(unencryptedPassword, this.password);
+  @BeforeInsert()
+  @BeforeUpdate()
+  parseEmailToLowerCase() {
+    if (this.email) {
+      this.email = this.email.toLowerCase();
+    }
   }
 }
+
+export default User;
