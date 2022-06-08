@@ -8,3 +8,4 @@ script
 test/.eslintrc.js
 .eslintrc.js
 static/*
+generateKeys.ts

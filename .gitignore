@@ -106,3 +106,5 @@ build
 
 # Terraform working dir
 terraform/.terraform
+
+generateKeys.ts
