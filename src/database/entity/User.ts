@@ -9,6 +9,11 @@ import {
 import * as bcrypt from 'bcrypt';
 import BaseEntity from './BaseEntity';
 
+enum UserRole {
+  admin = 'admin',
+  user = 'user',
+}
+
 @Entity()
 class User extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -27,8 +32,14 @@ class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
+  @Column({ default: UserRole.user })
+  role: string;
+
   @Column()
   password: string;
+
+  @Column({ unique: true, nullable: true })
+  token!: string;
 
   @BeforeInsert()
   @BeforeUpdate()
