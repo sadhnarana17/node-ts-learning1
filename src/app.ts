@@ -6,11 +6,11 @@ import * as swaggerUi from 'swagger-ui-express';
 import logger from './service/logger';
 import errorMiddleware from './routes/middleware/errorMiddleware';
 import v1 from './routes/v1';
-
 import catchAsync from './utils/catchAsync';
 import page404 from './routes/root';
 
 const express = require('express');
+const cors = require('cors');
 
 interface RunAppResult {
   app: any;
@@ -29,6 +29,11 @@ const runApp: () => Promise<RunAppResult> = catchAsync(
     app.get('/', (req, res) => {
       res.send('Work in progress');
     });
+    app.use(
+      cors({
+        origin: '*',
+      }),
+    );
 
     // parse incoming request body and append data to `req.body`
     app.use(bodyParser.json());

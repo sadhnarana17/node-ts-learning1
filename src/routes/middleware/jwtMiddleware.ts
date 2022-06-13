@@ -1,19 +1,22 @@
-import { Request } from 'express';
-import { beginSegment } from '../../service/newrelic';
+import * as jwt from 'jsonwebtoken';
 
-const getToken = (req: Request) => {
-  const endSegment = beginSegment('jwtMiddleware');
+const config = process.env;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.split(' ')[0] === 'Bearer'
-  ) {
-    endSegment();
-    return req.headers.authorization.split(' ')[1];
+const authenticate = (req, res, next): Promise<any> => {
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      return res.status(403).send('A token is required for authentication');
+    }
+    try {
+      const decoded = jwt.verify(token, config.JWT_SECRET_KEY);
+      req.user = decoded;
+    } catch (err) {
+      return res.status(401).send('Invalid Token');
+    }
+    return next();
   }
-
-  endSegment();
-  return null;
+  return res.status(401).send('Invalid Token');
 };
 
-export default getToken;
+export default authenticate;
