@@ -25,7 +25,6 @@ const addBook = (requestData: BookInputType): Promise<any> => {
         `/admin/book/add/: Error ${error} when processing the request`,
         error.stack,
       );
-
       throw error;
     },
   )();

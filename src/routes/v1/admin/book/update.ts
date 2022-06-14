@@ -2,24 +2,24 @@ import { Router } from 'express';
 import BookInput from '../../../../service/admin/book/type/bookInput';
 import validationMiddleware from '../../../middleware/validationMiddleware';
 import auth from '../../../middleware/jwtMiddleware';
-import addBook from '../../../../service/admin/book/add';
+import updateBook from '../../../../service/admin/book/update';
 import catchAsync from '../../../../utils/catchAsync';
 import HttpException from '../../../../utils/exceptions/HttpException';
 import logger from '../../../../service/logger';
 
 const route = (router: Router) => {
-  router.post(
-    '/add',
+  router.patch(
+    '/update',
     auth,
     validationMiddleware(BookInput),
     async (req: Record<string, any>, res, next) => {
       catchAsync(
         async () => {
-          const book = await addBook(req.body);
+          const book = await updateBook(req.body);
           if (book) {
             res.status(200).type('application/json').send({
               data: book,
-              message: 'Book added successfully.',
+              message: 'Book updated successfully.',
             });
           }
         },
