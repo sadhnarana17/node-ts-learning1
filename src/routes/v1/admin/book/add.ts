@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import BookInput from '../../../service/admin/type/bookInput';
-import validationMiddleware from '../../middleware/validationMiddleware';
-import auth from '../../middleware/jwtMiddleware';
-import addBook from '../../../service/admin/book';
-import catchAsync from '../../../utils/catchAsync';
-import HttpException from '../../../utils/exceptions/HttpException';
-import logger from '../../../service/logger';
+import BookInput from '../../../../service/admin/book/type/bookInput';
+import validationMiddleware from '../../../middleware/validationMiddleware';
+import auth from '../../../middleware/jwtMiddleware';
+import addBook from '../../../../service/admin/book/add';
+import catchAsync from '../../../../utils/catchAsync';
+import HttpException from '../../../../utils/exceptions/HttpException';
+import logger from '../../../../service/logger';
 
 const route = (router: Router) => {
   router.post(

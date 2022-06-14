@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, ValidateIf } from 'class-validator';
-import { BookMode } from '../../../database/entity/Book';
+import { BookMode } from '../../../../database/entity/Book';
 
 class BookInput {
   @IsString()

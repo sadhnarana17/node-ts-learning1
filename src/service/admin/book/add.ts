@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
-import Book from '../../database/entity/Book';
-import catchAsync from '../../utils/catchAsync';
-import logger from '../logger';
+import Book from '../../../database/entity/Book';
+import catchAsync from '../../../utils/catchAsync';
+import logger from '../../logger';
 
 type BookInputType = {
   author: string;
