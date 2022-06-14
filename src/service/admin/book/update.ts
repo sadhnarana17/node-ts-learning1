@@ -17,7 +17,7 @@ const updateBook = (requestData: BookInputType): Promise<any> => {
   return catchAsync(
     async () => {
       const bookRepository = getRepository(Book);
-      const book = bookRepository.findOne({ id: requestData.id });
+      const book = await bookRepository.findOne({ id: requestData.id });
       if (!book) {
         throw new HttpException(404, 'Data not found');
       }
